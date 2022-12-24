@@ -1,0 +1,97 @@
+#%RAML 1.0
+title: member-system-api
+
+traits:
+  clientIdEnforcement : !include /exchange_modules/8bcf9094-8a84-4d10-b7e3-a821f78eadc6/fragment-common-traits/1.0.0/clientidEnforcement-header-traits.raml
+  common : !include /exchange_modules/8bcf9094-8a84-4d10-b7e3-a821f78eadc6/fragment-common-traits/1.0.0/common-header-traits.raml
+  memberqueryParam: !include /exchange_modules/8bcf9094-8a84-4d10-b7e3-a821f78eadc6/fragment-common-traits/1.0.0/member-quearyParams-traits.raml
+
+types:
+  commonError: !include /exchange_modules/8bcf9094-8a84-4d10-b7e3-a821f78eadc6/fragment-common-datatypes/1.0.0/common/error-response-dataType.raml
+  getOTPResponse: !include /exchange_modules/8bcf9094-8a84-4d10-b7e3-a821f78eadc6/fragment-common-datatypes/1.0.0/Authorization/get-OTP-response-datatype.raml
+  PostOTPRequest: !include /exchange_modules/8bcf9094-8a84-4d10-b7e3-a821f78eadc6/fragment-common-datatypes/1.0.0/Authorization/post-OTP-Request-datatype.raml
+  PostOTPResponse: !include /exchange_modules/8bcf9094-8a84-4d10-b7e3-a821f78eadc6/fragment-common-datatypes/1.0.0/Authorization/post-member-response-dataType.raml
+
+
+/members:
+  /OTP:
+    post:
+      description: post the customer details
+      is:
+        - clientIdEnforcement
+        - common
+      body:
+        application/json:
+                  description: Output message for Get Member Details
+                  type: PostOTPRequest
+                  example: !include /Examples/post-otp-request-example.json
+                    
+      responses:
+            200:
+              body:
+                application/json:
+                  description: Output message for Get Member Details
+                  type: PostOTPResponse
+                  example: !include /Examples/POST-otp-response-example.json
+
+            400:
+              body:
+                application/json:
+                  description: Error Output message for Get Member Details
+                  type: commonError
+                  example: !include /Examples/error-resonse-400-example.json
+            401:
+              body:
+                application/json:
+                  description: error
+                  type: commonError
+                  example: !include /Examples/error-response-401-example.json
+            404:
+              body:
+                application/json:
+                  description: Resource not found
+                  type: commonError
+                  example: !include /Examples/error-response-404-example.json
+            500:
+              body:
+                application/json:
+                  description: SERVER_ERROR
+                  type: commonError
+                  example: !include /Examples/error-response-500-example.json  
+  /{memberId}:
+    /OTP:
+      get:
+        is:
+        - clientIdEnforcement
+        - common
+        responses:
+          200:
+            body:
+              application/json:
+                type: getOTPResponse
+                example: !include /Examples/get-OTP-Response-example.json
+          400:
+            body:
+              application/json:
+                description: Error Output message for Get Member Details
+                type: commonError
+                example: !include /Examples/error-resonse-400-example.json
+          401:
+            body:
+              application/json:
+                description: error
+                type: commonError
+                example: !include /Examples/error-response-401-example.json
+          404:
+            body:
+              application/json:
+                description: Resource not found
+                type: commonError
+                example: !include /Examples/error-response-404-example.json
+          500:
+            body:
+              application/json:
+                description: SERVER_ERROR
+                type: commonError
+                example: !include /Examples/error-response-500-example.json
+
